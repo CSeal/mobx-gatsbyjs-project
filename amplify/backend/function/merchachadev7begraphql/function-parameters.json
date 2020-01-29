@@ -1,0 +1,17 @@
+{
+    "permissions": {
+        "auth": {
+            "merchachadev7auth": [
+                "read"
+            ]
+        },
+        "api": {
+            "merchachadev7api": [
+                "create",
+                "read",
+                "update",
+                "delete"
+            ]
+        }
+    }
+}

@@ -1,0 +1,16 @@
+/*******************************
+     User Global Variables
+*******************************/
+
+@headerFont    : "Quicksand", "Helvetica Neue", Arial, Helvetica, sans-serif;
+@pageFont      : "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+@fontSmoothing : antialiased;
+
+@googleFontName    : 'Quicksand';
+@importGoogleFonts : true;
+@googleFontSizes   : '400,700,400regular,700regular,400medium,700medium';
+@googleSubset      : 'latin';
+
+@googleProtocol    : 'https://';
+@googleFontRequest : '@{googleFontName}:@{googleFontSizes}&subset=@{googleSubset}';
+

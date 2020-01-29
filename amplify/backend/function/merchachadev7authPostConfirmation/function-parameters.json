@@ -1,0 +1,14 @@
+{
+    "trigger": true,
+    "modules": [
+        "add-to-group"
+    ],
+    "parentResource": "merchachadev7auth",
+    "functionName": "merchachadev7authPostConfirmation",
+    "parentStack": "auth",
+    "triggerEnvs": "[]",
+    "triggerTemplate": "PostConfirmation.json.ejs",
+    "roleName": "merchachadev7authPostConfirmation",
+    "skipEdit": true,
+    "resourceName": "merchachadev7authPostConfirmation"
+}

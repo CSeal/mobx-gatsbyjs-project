@@ -1,0 +1,317 @@
+type Query
+{
+  sendsnssiteadmin(sender: String, subject: String, message: String): Boolean @function(name: "merchachadev7messaging-${env}")
+  sendemail(sender: String, emailto: AWSEmail, subject: String, message: String): Boolean @function(name: "merchachadev7messaging-${env}")
+  getdeckanyauthenticated(id: String): QuoteBoard @function(name: "merchachadev7begraphql-${env}")
+  inviteacceptdeck(deckid: String): Boolean @function(name: "merchachadev7begraphql-${env}")
+  deletedeckuserjoins(deckid: String, usernames: [String]): Boolean @function(name: "merchachadev7begraphql-${env}")
+  createquoteitem(deckid: String, productId: String, productName: String, productDescription: String, productImage: String, productCategory: String, quantity: Int, usernotes: String): Boolean @function(name: "merchachadev7begraphql-${env}")
+  updatequoteitemsdeck(qitemid: String, newdeckid: String): Boolean @function(name: "merchachadev7begraphql-${env}")
+  checkshopslugavail(slug: String): Boolean @function(name: "merchachadev7begraphql-${env}")
+  inviteaddtoshop(shopid: String, inviteemail: String): Boolean @function(name: "merchachadev7begraphql-${env}")
+  inviteacceptshop(shopid: String): Boolean @function(name: "merchachadev7begraphql-${env}")
+  deleteshopuserjoins(shopid: String, usernames: [String]): Boolean @function(name: "merchachadev7begraphql-${env}")
+  createshopitem(shopid: String, access: String, productId: String, productName: String, productDescription: String, productImage: String, productImagesMore: [String], productCategory: String, quantity: Int, pricecents: Int, usernotes: String, psize: [String], pcolor: [String], pmaterial: [String], pshape: [String], pimprint: [String]): Boolean @function(name: "merchachadev7begraphql-${env}")
+  getshopitemforeditor(sitemid: String): ShopItem @function(name: "merchachadev7begraphql-${env}")
+  updateshopitemsshop(sitemid: String, newshopid: String): Boolean @function(name: "merchachadev7begraphql-${env}")
+  updateshopitemsaccess(sitemid: String, newaccess: String): Boolean @function(name: "merchachadev7begraphql-${env}")
+}
+
+type VisitorInquiry
+  @model
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete] },
+    { allow: groups, groups: ["users"], operations: [create] },
+    { allow: public, provider: iam, operations: [create] }
+  ])
+{
+    id: ID!
+    sender: String!
+    subject: String!
+    message: String!
+    sendsns: Boolean @function(name: "merchachadev7messaging-${env}")
+    createdAt: String
+}
+
+# status "enabled" includes the content in build pages;
+# allowing private IAM read for Gatsby build AWS user to query
+type SliderItem
+  @model
+  @key(name: "SliderItemByStatusUpdatedAt", fields: ["status", "updatedAt"], queryField: "sliderItemByStatus")
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete] },
+    { allow: private, provider: iam, operations: [read] }
+  ])
+{
+  id: ID!
+  seoalt: String!
+  uri: String!
+  status: String!
+  image: String!
+  createdAt: String
+  updatedAt: String
+}
+
+# use id as {productID}_{username} (userId-field here is username: owner handling by the resolver)
+type ProdSaved
+  @model
+  @key(name: "ByUserSortUpdatedAt", fields: ["userId", "updatedAt"], queryField: "prodSavedsByUserId")
+  @key(name: "ByProdIdSortUpdatedAt", fields: ["productId", "updatedAt"], queryField: "prodSavedByProdId")
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete] },
+    { allow: owner, ownerField: "userId", operations: [read, create, update, delete] }
+  ])
+{
+    id: ID!
+    userId: String
+    productId: String!
+    updatedAt: String
+}
+
+# use Cognito user pool sub as id
+type Editor
+  @model
+  @key(name: "ByUsername", fields: ["username"], queryField: "editorByUsername")
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete] },
+    { allow: owner, ownerField: "username", operations: [read, create, update] },
+    { allow: private, provider: iam, operations: [read, update] }
+  ])
+{
+  id: ID!
+  username: String!
+  qboards: [QuoteBoardEditor] @connection(keyName: "byEditor", fields: ["id"])
+  shops: [ShopEditor] @connection(keyName: "byEditor", fields: ["id"])
+}
+
+type QuoteBoard
+  @model
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete] },
+    { allow: owner, ownerField: "owner", operations: [read, create, update, delete] },
+    { allow: owner, ownerField: "members", operations: [read, update, delete] },
+    { allow: private, provider: iam, operations: [read, update] },
+    { allow: public, provider: iam, operations: [read] }
+  ])
+{
+    id: ID!
+    owner: String
+    members: [String]
+    name: String!
+    pendingquotes: Boolean
+    description: String
+    imprintdesign: String
+    inhandsdate: String
+    createdAt: String
+    updatedAt: String
+    invites: [String]
+    editors: [QuoteBoardEditor] @connection(keyName: "byQuoteBoard", fields: ["id"])
+    qitems: [QuoteItem] @connection(name: "QuoteBoardItems", sortField: "updatedAt", limit: 9999)
+}
+
+# Join model (many-to-many): disable queries;
+# use id as {qboardID}_{username}
+type QuoteBoardEditor
+  @model(queries: null)
+  @key(name: "byQuoteBoard", fields: ["qboardID", "editorID"])
+  @key(name: "byEditor", fields: ["editorID", "qboardID"])
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [create, update, delete] },    
+    { allow: owner, ownerField: "editorUsername", operations: [create, update, delete] },
+    { allow: private, provider: iam, operations: [create, update, delete] }
+  ])
+{
+  id: ID!
+  qboardID: ID!
+  editorID: ID!
+  board: QuoteBoard! @connection(fields: ["qboardID"])
+  editor: Editor! @connection(fields: ["editorID"])
+}
+
+# create/delete via lambda only to check if calling user has edit-permission to the linked deck;
+# updates by admin only (pricing, images, attributes)
+type QuoteItem
+  @model
+  @key(name: "QIbyProdIdSortUpdatedAt", fields: ["productId", "updatedAt"], queryField: "quoteItemByProdId")
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete] },
+    { allow: private, provider: iam, operations: [read, create, update] }
+  ])
+{
+    id: ID!
+    createdAt: String
+    updatedAt: String
+    board: QuoteBoard @connection(name: "QuoteBoardItems")
+    productId: String!
+    productName: String!
+    productDescription: String!
+    productImage: String!
+    productImagesMore: [String]
+    productCategory: String
+    quantity: Int
+    pricecents: Int
+    usernotes: String
+    psize: [String]
+    pcolor: [String]
+    pmaterial: [String]
+    pshape: [String]
+    pimprint: [String]
+}
+
+# status: "pending" or "live"
+type Shop
+  @model
+  @key(name: "ShopByStatusSortUpdatedAt", fields: ["status", "updatedAt"], queryField: "shopsByStatus")
+  @key(name: "ShopBySlug", fields: ["slug"], queryField: "shopBySlug")
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete] },
+    { allow: owner, ownerField: "owner", operations: [read, create, update, delete] },
+    { allow: owner, ownerField: "shopadmins", operations: [read, create, update, delete] },
+    { allow: owner, ownerField: "members", operations: [read] },
+    { allow: private, provider: iam, operations: [read, update] }
+  ])
+{
+    id: ID!
+    owner: String
+    shopadmins: [String]
+    members: [String]
+    status: String!
+    seotitle: String!
+    slug: String!
+    createdAt: String
+    updatedAt: String
+    invites: [String]
+    editors: [ShopEditor] @connection(keyName: "byShop", fields: ["id"])
+    sitems: [ShopItem] @connection(name: "ShopItems", sortField: "updatedAt", limit: 9999)
+}
+
+# Join model (many-to-many): disable queries;
+# use id as {shopID}_{username}
+type ShopEditor
+  @model(queries: null)
+  @key(name: "byShop", fields: ["shopID", "editorID"])
+  @key(name: "byEditor", fields: ["editorID", "shopID"])
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [create, update, delete] },    
+    { allow: owner, ownerField: "editorUsername", operations: [create, update, delete] },
+    { allow: private, provider: iam, operations: [create, update, delete] }
+  ])
+{
+  id: ID!
+  shopID: ID!
+  editorID: ID!
+  shop: Shop! @connection(fields: ["shopID"])
+  editor: Editor! @connection(fields: ["editorID"])
+}
+
+# access: "private" or "public";
+# create/delete via lambda only to check if calling user has edit-permission to the linked shop;
+# updates by admin only (pricing, images, attributes)
+type ShopItem
+  @model
+  @key(name: "SIbyAccessSortUpdatedAt", fields: ["access", "updatedAt"], queryField: "shopItemsByAccess")
+  @key(name: "SIbyProdIdSortUpdatedAt", fields: ["productId", "updatedAt"], queryField: "shopItemByProdId")
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete] },
+    { allow: private, provider: iam, operations: [read, create, update] }
+  ])
+{
+    id: ID!
+    createdAt: String
+    updatedAt: String
+    access: String!
+    shop: Shop @connection(name: "ShopItems")
+    productId: String!
+    productName: String!
+    productDescription: String!
+    productImage: String!
+    productImagesMore: [String]
+    productCategory: String
+    quantity: Int
+    pricecents: Int
+    usernotes: String
+    psize: [String]
+    pcolor: [String]
+    pmaterial: [String]
+    pshape: [String]
+    pimprint: [String]
+}
+
+# separate table from OrderItem for query performance: delete when ordered or removed;
+# pitemSource: "deck" or "shop", with the corresponding ID in pitemSourceId
+type CartItem
+  @model
+  @key(name: "CIbyUserUpdatedAt", fields: ["username", "updatedAt"], queryField: "cartItemByUsername")
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete] },
+    { allow: owner, ownerField: "username", operations: [read, create, update, delete] }
+  ])
+{
+  id: ID!
+  createdAt: String
+  updatedAt: String
+  username: String!
+  pitemId: String!
+  pitemSource: String!
+  pitemSourceId: String!
+  productId: String!
+  productName: String!
+  pitemQuantity: Int!
+  pitemPricecentsSel: Int!
+  psize: String
+  pcolor: String
+  pmaterial: String
+  pshape: String
+  pimprint: String
+}
+
+# status: "new" initially, "delivered" finally, "processed" and other values as needed
+type Order
+  @model
+  @key(name: "OrderByUser", fields: ["username", "createdAt"], queryField: "orderByUsername")
+  @key(name: "OrderByContactEmail", fields: ["contactEmail", "createdAt"], queryField: "orderByContactEmail")
+  @key(name: "OrderByStatusUpdatedAt", fields: ["status", "updatedAt"], queryField: "orderByStatus")
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete] },
+    { allow: owner, ownerField: "username", operations: [read, create, update] }
+  ])
+{
+  id: ID!
+  username: String!
+  contactEmail: String!
+  contactPhone: String
+  status: String!
+  createdAt: String
+  updatedAt: String
+  totalCentsIncrement: Int!
+  products: [OrderItem] @connection(keyName: "OIbyOrderUpdatedAt", fields: ["id"])
+}
+
+type OrderItem
+  @model
+  @key(name: "OIbyOrderUpdatedAt", fields: ["orderID", "updatedAt"])
+  @key(name: "OIbyUserUpdatedAt", fields: ["username", "updatedAt"], queryField: "orderItemByUsername")
+  @auth(rules: [
+    { allow: groups, groups: ["admin"], operations: [read, create, update, delete] },
+    { allow: owner, ownerField: "username", operations: [read, create, update, delete] }
+  ])
+{
+  id: ID!
+  createdAt: String
+  updatedAt: String
+  username: String!
+  orderID: ID!
+  pitemId: String!
+  pitemSource: String!
+  pitemSourceId: String!
+  productId: String!
+  productName: String!
+  pitemQuantity: Int!
+  pitemPricecentsSel: Int!
+  psize: String
+  pcolor: String
+  pmaterial: String
+  pshape: String
+  pimprint: String
+  order: Order @connection(fields: ["orderID"])
+}

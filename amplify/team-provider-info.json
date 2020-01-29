@@ -1,0 +1,25 @@
+{
+    "master": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-merchachadev7-master-61056-authRole",
+            "UnauthRoleArn": "arn:aws:iam::692387282546:role/amplify-merchachadev7-master-61056-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::692387282546:role/amplify-merchachadev7-master-61056-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "amplify-merchachadev7-master-61056-deployment",
+            "UnauthRoleName": "amplify-merchachadev7-master-61056-unauthRole",
+            "StackName": "amplify-merchachadev7-master-61056",
+            "StackId": "arn:aws:cloudformation:us-west-2:692387282546:stack/amplify-merchachadev7-master-61056/e8849260-297b-11ea-b1bb-066fff45a7ea",
+            "AmplifyAppId": "d3jt9aoub9w309"
+        },
+        "categories": {
+            "function": {
+                "merchachadev7authPostConfirmation": {
+                    "GROUP": "users"
+                }
+            },
+            "auth": {
+                "merchachadev7auth": {}
+            }
+        }
+    }
+}

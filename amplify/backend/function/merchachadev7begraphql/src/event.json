@@ -1,0 +1,12 @@
+{
+    "typeName": "Query",
+    "fieldName": "inviteacceptdeck",
+    "arguments": {
+        "deckid": "9933098b-7e1c-4769-8da3-0584baeb4755"
+    },
+    "identity": {
+        "groups": null,
+        "sub": "0c30d7f9-a22b-4705-9c71-a065fb15da7d",
+        "username": "another_collaborator"
+    }
+}

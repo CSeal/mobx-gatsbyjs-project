@@ -1,0 +1,13 @@
+{
+    "typeName": "Query",
+    "fieldName": "sendsnssiteadmin",
+    "arguments": {
+        "sender": "zzzzz@zzzzzz.com",
+        "subject": "Specific subject",
+        "message": "Some message text."
+    },
+    "identity": {
+        "issuer": "https://cognito-idp.us-west-2.amazonaws.com/us-west-2_KClVpaVGE",
+        "username": "devuser1"
+    }
+}

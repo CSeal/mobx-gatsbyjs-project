@@ -1,0 +1,14 @@
+{
+    "typeName": "VisitorInquiry",
+    "fieldName": "sendsns",
+    "arguments": {},
+    "source": {
+        "createdAt": "2019-10-25T00:53:07.221Z",
+        "sender": "email@qq.com",
+        "subject": "Product inquiry form in product details",
+        "__typename": "VisitorInquiry",
+        "id": "bba5545a-5b09-4d2c-80de-ba5b05599ca8",
+        "message": "Some question text here. \n /?product=551764348",
+        "updatedAt": "2019-10-25T00:53:07.221Z"
+    }
+}

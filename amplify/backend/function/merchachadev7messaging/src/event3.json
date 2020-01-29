@@ -1,0 +1,14 @@
+{
+    "typeName": "Query",
+    "fieldName": "sendemail",
+    "arguments": {
+        "sender": "zzzzz@zzzzzz.com",
+        "emailto": "destination@email.com",
+        "subject": "Specific subject",
+        "message": "Some message text here."
+    },
+    "identity": {
+        "issuer": "https://cognito-idp.us-west-2.amazonaws.com/us-west-2_KClVpaVGE",
+        "username": "firstname_lastname"
+    }
+}

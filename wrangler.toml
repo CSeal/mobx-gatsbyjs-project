@@ -1,0 +1,8 @@
+name = "merchachadev"
+type = "webpack"
+account_id = "efb980ecf87aa4d97b13c7352cbb0ee7"
+workers_dev = true
+
+[site]
+bucket = "./public"
+entry-point = "workers-site"

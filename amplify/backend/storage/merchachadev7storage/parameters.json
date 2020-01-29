@@ -1,0 +1,28 @@
+{
+    "bucketName": "merchachadev7media",
+    "authPolicyName": "s3_amplify_45c756ca",
+    "unauthPolicyName": "s3_amplify_45c756ca",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "selectedGuestPermissions": [
+        "s3:GetObject",
+        "s3:ListBucket"
+    ],
+    "selectedAuthenticatedPermissions": [
+        "s3:GetObject",
+        "s3:ListBucket"
+    ],
+    "s3PermissionsGuestPublic": "DISALLOW",
+    "s3PermissionsGuestUploads": "DISALLOW",
+    "GuestAllowList": "DISALLOW",
+    "s3PermissionsAuthenticatedPublic": "DISALLOW",
+    "s3PermissionsAuthenticatedProtected": "DISALLOW",
+    "s3PermissionsAuthenticatedPrivate": "DISALLOW",
+    "s3PermissionsAuthenticatedUploads": "DISALLOW",
+    "AuthenticatedAllowList": "DISALLOW",
+    "triggerFunction": "NONE"
+}

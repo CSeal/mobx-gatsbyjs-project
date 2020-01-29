@@ -1,0 +1,101 @@
+$ amplify add auth
+
+Using service: Cognito, provided by: awscloudformation
+ 
+ The current configured provider is Amazon Cognito. 
+ 
+Do you want to use the default authentication and security configuration?
+Manual configuration
+ 
+Select the authentication/authorization services that you want to use:
+User Sign-Up, Sign-In, connected with AWS IAM controls (Enables per-user Storage features for images or other content, Analytics, and more)
+ 
+Please provide a friendly name for your resource that will be used to label this category in the project:
+merchachadev7auth
+ 
+Please enter a name for your identity pool.
+merchachadev7auth_identitypool
+
+Allow unauthenticated logins? (Provides scoped down permissions that you can control via AWS IAM)
+Yes
+
+Do you want to enable 3rd party authentication providers in your identity pool?
+No
+
+Please provide a name for your user pool:
+merchachadev7auth_userpool
+
+Warning: you will not be able to edit these selections.
+
+How do you want users to be able to sign in?
+Username
+
+Do you want to add User Pool Groups?
+Yes
+
+Provide a name for your user pool group:
+admin
+
+Do you want to add another User Pool Group?
+Y
+
+Provide a name for your user pool group:
+users
+
+Sort the user pool groups in order of preference
+admin
+users
+
+
+Do you want to add an admin queries API?
+Y
+
+Do you want to restrict access to the admin queries API to a specific Group
+Y, admin
+
+
+Multifactor authentication (MFA) user login options:
+OFF
+
+Email based user registration/forgot password:
+Enabled (Requires per-user email entry at registration)
+
+Please specify an email verification subject: Your verification code
+Please specify an email verification message: Your verification code is {####}
+
+Do you want to override the default password policy for this User Pool?
+Yes
+Enter the minimum password length for this User Pool:
+6
+Select the password character requirements for your userpool: (Press <space> to select, <a> to toggle all, <i> to invert selection)
+(nothing selected)
+
+Warning: you will not be able to edit these selections.
+
+What attributes are required for signing up? (Press <space> to select, <a> to toggle all, <i> to invert selection)
+Email
+
+Specify the app's refresh token expiration period (in days):
+3650
+
+Do you want to specify the user attributes this app can read and write?
+No
+
+Do you want to enable any of the following capabilities? (Press <space> to select, <a> to toggle all, <i> to invert selection)
+Add User to Group
+(see below: prompt to enter name)
+
+Do you want to use an OAuth flow?
+No
+
+Do you want to configure Lambda Triggers for Cognito?
+No
+
+Enter the name of the group to which users will be added.
+users
+
+Succesfully added the Lambda function locally
+Do you want to edit your add-to-group function now?
+n
+
+
